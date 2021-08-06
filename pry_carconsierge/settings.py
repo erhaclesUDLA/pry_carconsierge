@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from django.urls import reverse_lazy, get_callable
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'seguridad',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'pry_carconsierge.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,3 +125,43 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+def _get_failure_view():
+    """
+    Returns the view to be used for CSRF rejections
+    """
+    return get_callable(settings.CSRF_FAILURE_VIEW)
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# pdf
+
+ASSETS_DIR = os.path.join(BASE_DIR, 'assets')
+DEST_DIR = os.path.join(BASE_DIR, 'output')
+
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 14400
+#Validacion que la sesión se cierra después de cerrar el navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+EMAIL_HOST ='smtp.gmail.com'
+EMAIL_HOST_USER= 'fran.chango@gmail.com'
+EMAIL_HOST_PASSWORD ='@123destinocra12'
+EMAIL_PORT =587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+LOGIN_REDIRECT_URL = reverse_lazy('login_session')
+SESSION_COOKIE_SECURE = False
+
+AUTOCOMMIT = True
+
+
+'''
+SEND_GRID_API_KEY =''
+
+---
+DEFAULT_FROM_EMAIL =''
+ACCOUNT_EMAIL_SUBJCT_PREFIX=''
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend' '''
